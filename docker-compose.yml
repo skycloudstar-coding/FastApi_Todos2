@@ -1,0 +1,118 @@
+version: "3.7"
+
+services:
+  fastapi-app:
+    build:
+      context: ./fastapi-app      # Dockerfile이 위치한 디렉토리 경로
+      dockerfile: Dockerfile      # Dockerfile 이름 (생략 가능, 기본값은 'Dockerfile')
+    container_name: fastapi-app
+    ports:
+      - "5001:5001"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - loki
+      - promtail
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # 기본 Grafana 로그인 비밀번호
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro  # Docker 컨테이너 로그 읽기
+      - ./promtail-config.yml:/etc/promtail/promtail-config.yml
+    command: "--config.file=/etc/promtail/promtail-config.yml"
+    depends_on:
+      - loki
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true  # 메모리 제한 환경에서 유용한 옵션
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+  jenkins:
+    build:
+      context: ./jenkins      # Dockerfile이 위치한 디렉토리 경로
+      dockerfile: Dockerfile      # Dockerfile 이름 (생략 가능, 기본값은 'Dockerfile')
+    container_name: jenkins
+    user: root
+    privileged: true
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock:Z
+  # Jmeter : 학습용으로 참고 부탁드립니다
+  jmeter:
+    image: justb4/jmeter:latest
+    container_name: jmeter
+    volumes:
+      - ./jmeter:/jmeter  # 호스트의 ./jmeter 디렉토리에 테스트 플랜 및 설정 파일들을 위치
+    environment:
+      - JVM_ARGS=-Xms1024m -Xmx2048m #수정 최대한 지양
+    # JMeter 테스트 플랜을 비GUI 모드로 실행하며, Backend Listener의 설정으로 InfluxDB에 메트릭 전송
+    # 아래 예시는 JMeter 테스트 플랜 내부에서 influxdbUrl 프로퍼티를 사용할 수 있도록 설정
+    command: [ "-n", "-t", "/jmeter/fastapi_test_plan.jmx", "-l", "/jmeter/results.jtl", "-JinfluxdbUrl=http://influxdb:8086/write?db=jmeter" ]
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=jmeter
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+volumes:
+  grafana-data:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:
+  jenkins-data:
+  jmeter:
+  influxdb-data:
