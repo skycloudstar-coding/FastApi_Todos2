@@ -58,7 +58,13 @@ services:
       - JVM_ARGS=-Xms1024m -Xmx2048m #수정 최대한 지양
     # JMeter 테스트 플랜을 비GUI 모드로 실행하며, Backend Listener의 설정으로 InfluxDB에 메트릭 전송
     # 아래 예시는 JMeter 테스트 플랜 내부에서 influxdbUrl 프로퍼티를 사용할 수 있도록 설정
-    command: [ "-n", "-t", "/jmeter/fastapi_test_plan.jmx", "-l", "/jmeter/results.jtl", "-JinfluxdbUrl=http://influxdb:8086/write?db=jmeter" ]
+    command: [
+      "jmeter", 
+      "-n", 
+      "-t", "/jmeter/fastapi_test_plan.jmx", 
+      "-l", "/jmeter/results.jtl", 
+      "-JinfluxdbUrl=http://influxdb:8086/write?db=jmeter"
+    ]
   influxdb:
     image: influxdb:1.8
     container_name: influxdb
