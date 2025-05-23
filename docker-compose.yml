@@ -60,7 +60,7 @@ services:
       - "-n"
       - "-t" "/jmeter/fastapi_test_plan.jmx"
       - "-l" "/jmeter/results.jtl"
-      - "-JBASE_URL=http://fastapi-app:5001"
+      - "-JBASE_URL=http://localhost:5001"
       - "-Jjmeter.save.saveservice.output_format=csv"
       - "-e"
       - "-o" "/jmeter/report"
