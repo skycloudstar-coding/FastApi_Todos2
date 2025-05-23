@@ -10,7 +10,7 @@
           <!-- 여기에 실제 테스트할 호스트:포트를 지정 -->
           <elementProp name="BASE_URL" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">http://localhost:5001</stringProp>
+            <stringProp name="Argument.value">http://15.164.51.131/:5001</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
