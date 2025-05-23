@@ -52,30 +52,24 @@ services:
     build:
       context: ./jmeter
       dockerfile: Dockerfile
+    container_name: jmeter
     volumes:
-      - ./jmeter:/jmeter  # 호스트의 ./jmeter 디렉토리에 테스트 플랜 및 설정 파일들을 위치
-    environment:
-      - JVM_ARGS=-Xms1024m -Xmx2048m #수정 최대한 지양
-    # JMeter 테스트 플랜을 비GUI 모드로 실행하며, Backend Listener의 설정으로 InfluxDB에 메트릭 전송
-    # 아래 예시는 JMeter 테스트 플랜 내부에서 influxdbUrl 프로퍼티를 사용할 수 있도록 설정
-    command: [
-      "jmeter", 
-      "-n", 
-      "-t", "/jmeter/fastapi_test_plan.jmx", 
-      "-l", "/jmeter/results.jtl", 
-      "-JinfluxdbUrl=http://localhost:8086/write?db=jmeter"
-    ]
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
-    ports:
-      - "8086:8086"
-    volumes:
-      - influxdb-data:/var/lib/influxdb
-    environment:
-      - INFLUXDB_DB=jmeter
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
+      - ./jmeter:/jmeter
+    command:
+      - "jmeter"
+      - "-n"
+      - "-t" "/jmeter/fastapi_test_plan.jmx"
+      - "-l" "/jmeter/results.jtl"
+      - "-JBASE_URL=http://fastapi-app:5001"
+      - "-Jjmeter.save.saveservice.output_format=csv"
+      - "-e"
+      - "-o" "/jmeter/report"
+    networks:
+      - loadtest-net
+  
+  networks:
+  loadtest-net:
+    driver: bridge
 
 volumes:
   sonarqube_conf:
@@ -84,4 +78,3 @@ volumes:
   sonarqube_extensions:
   grafana-data:
   jmeter:
-  influxdb-data:
