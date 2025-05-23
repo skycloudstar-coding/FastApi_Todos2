@@ -10,7 +10,7 @@
           <!-- 필요한 전역 변수들을 추가할 수 있습니다. -->
           <elementProp name="BASE_URL" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">host.docker.internal</stringProp>
+            <stringProp name="Argument.value">5001</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -25,7 +25,7 @@
         </elementProp>
         <stringProp name="HTTPSampler.protocol">http</stringProp>
         <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
-        <stringProp name="HTTPSampler.port">${BASE_URL}</stringProp>
+        <stringProp name="HTTPSampler.port">5001</stringProp>
         <stringProp name="HTTPSampler.connect_timeout"></stringProp>
         <stringProp name="HTTPSampler.response_timeout"></stringProp>
         <stringProp name="HTTPSampler.protocol"></stringProp>
