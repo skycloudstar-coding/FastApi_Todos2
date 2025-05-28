@@ -33,7 +33,6 @@
           <stringProp name="HTTPSampler.port">${__P(PORT)}</stringProp>
           <stringProp name="HTTPSampler.protocol">${__P(PROTOCOL)}</stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
-          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
         </ConfigTestElement>
         <hashTree/>
         <!-- HTTP Sampler -->
@@ -46,32 +45,11 @@
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <!-- CSV Result Collector -->
+        <!-- Result Collector: 파일 이름만 지정, 나머지는 jmeter.save.saveservice 기본값 사용 -->
         <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="CSV Result Collector" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <connectTime>true</connectTime>
-              <success>true</success>
-              <label>true</label>
-              <responseCode>true</responseCode>
-              <responseMessage>true</responseMessage>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <bytes>true</bytes>
-              <sentBytes>true</sentBytes>
-              <url>true</url>
-              <sampleCount>true</sampleCount>
-              <idleTime>true</idleTime>
-            </value>
-          </objProp>
           <stringProp name="filename">results.jtl</stringProp>
         </ResultCollector>
         <hashTree/>
