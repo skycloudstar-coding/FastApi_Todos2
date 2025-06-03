@@ -61,7 +61,7 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    depends on:
+    depends_on:
     - loki
     volumes:
       - grafana-data:/var/lib/grafana
