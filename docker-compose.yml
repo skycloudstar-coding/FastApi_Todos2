@@ -76,7 +76,17 @@ services:
     image: grafana/loki:latest
     container_name: loki
     ports:
-      - "3100:3100"  
+      - "3100:3100"
+  
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+    - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    - ./promtail-config.yml:/etc/promtail/promtail-config.yml
+    command: "--config.file=/etc/promtail/promtail-config.yml"
+    depends_on:
+      - loki
 
 volumes:
   sonarqube_conf:
