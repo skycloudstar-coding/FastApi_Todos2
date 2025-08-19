@@ -13,25 +13,25 @@ services:
     environment:
       - LOKI_ENDPOINT=http://loki:3100/loki/api/v1/push
 
-  jmeter:
-    build:
-      context: ./jmeter
-      dockerfile: Dockerfile
-    container_name: jmeter
-    volumes:
-      - ./jmeter:/jmeter
-    command:
-      - jmeter
-      - -n
-      - -t
-      - /jmeter/fastapi_test_plan.jmx
-      - -l
-      - /jmeter/results.jtl
-      - -JBASE_URL=http://fastapi-app:5001
-      - -Jjmeter.save.saveservice.output_format=csv
-      - -e
-      - -o
-      - /jmeter/report
+  #jmeter:
+  #  build:
+  #    context: ./jmeter
+  #    dockerfile: Dockerfile
+  #  container_name: jmeter
+  #  volumes:
+  #    - ./jmeter:/jmeter
+  #  command:
+  #    - jmeter
+  #    - -n
+  #    - -t
+  #    - /jmeter/fastapi_test_plan.jmx
+  #    - -l
+  #    - /jmeter/results.jtl
+  #    - -JBASE_URL=http://fastapi-app:5001
+  #    - -Jjmeter.save.saveservice.output_format=csv
+  #    - -e
+  #    - -o
+  #    - /jmeter/report
 
   sonarqube:
     image: sonarqube:latest
