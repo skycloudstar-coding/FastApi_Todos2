@@ -11,7 +11,6 @@ services:
     networks:
       - loadtest-net
 
-<<<<<<< HEAD
   jmeter:
     build:
       context: ./jmeter
@@ -36,27 +35,6 @@ services:
       - /jmeter/report
     networks:
       - loadtest-net
-=======
-  #jmeter:
-  #  build:
-  #    context: ./jmeter
-  #    dockerfile: Dockerfile
-  #  container_name: jmeter
-  #  volumes:
-  #    - ./jmeter:/jmeter
-  #  command:
-  #    - jmeter
-  #    - -n
-  #    - -t
-  #    - /jmeter/fastapi_test_plan.jmx
-  #    - -l
-  #    - /jmeter/results.jtl
-  #    - -JBASE_URL=http://fastapi-app:5001
-  #    - -Jjmeter.save.saveservice.output_format=csv
-  #    - -e
-  #    - -o
-  #    - /jmeter/report
->>>>>>> dcc87c1ce5a74246215b30e32575a7864cd86508
 
   sonarqube:
     image: sonarqube:latest
@@ -103,27 +81,9 @@ services:
     networks:
       - loadtest-net
 
-<<<<<<< HEAD
 networks:
   loadtest-net:
     driver: bridge
-=======
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    ports:
-      - "3100:3100"
-  
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    volumes:
-    - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    - ./promtail-config.yml:/etc/promtail/promtail-config.yml
-    command: "--config.file=/etc/promtail/promtail-config.yml"
-    depends_on:
-      - loki
->>>>>>> dcc87c1ce5a74246215b30e32575a7864cd86508
 
 volumes:
   sonarqube_conf:
