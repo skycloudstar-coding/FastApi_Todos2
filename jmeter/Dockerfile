@@ -1,5 +1,6 @@
 # JMeter용 Dockerfile (멀티 아키텍처: amd64/arm64 모두 지원)
-FROM openjdk:11-jre-slim
+# 기존: FROM openjdk:11-jre-slim  ← 이게 지금 Docker Hub에 없음
+FROM eclipse-temurin:11-jre-jammy
 
 # Set JMeter version and environment variables
 ENV JMETER_VERSION=5.4.1
