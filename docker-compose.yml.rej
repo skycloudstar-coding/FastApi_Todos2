@@ -1,0 +1,22 @@
+diff a/docker-compose.yml b/docker-compose.yml	(rejected hunks)
+@@ -8,16 +8,16 @@
+     container_name: fastapi-app
+     ports:
+       - "5001:5001"
+-    depends_on:
+-      - loki
+-    environment:
+-      - LOKI_ENDPOINT=http://loki:3100/loki/api/v1/push
++    networks:
++      - loadtest-net
+ 
+   jmeter:
+     build:
+       context: ./jmeter
+       dockerfile: Dockerfile
+     container_name: jmeter
++    depends_on:
++    - fastapi-app 
+     volumes:
+       - ./jmeter:/jmeter
+     command:
